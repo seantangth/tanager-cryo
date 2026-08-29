@@ -155,8 +155,11 @@ workflows read past. It is used three times here:
   the visible and this parameter is best placed to absorb that bias.
 - Melt pond retrieval at coarse resolution is a mature field (MERIS, MODIS, OLCI). What is
   new is **spaceborne 30 m with calibrated per-pixel uncertainty**.
-- This does **not** support early warning and we do not claim it. It supports
-  preconditioning and susceptibility mapping.
+- This does **not** support early warning and we do not claim it. A glacial lake can be
+  watched for years; a rock–ice slope gives minutes — which is exactly why the monitorable
+  quantity is the preconditioning. The Lhende Khola valley has now flooded twice in
+  thirteen months by two different mechanisms (a supraglacial-lake outburst in July 2025,
+  this rock–ice failure in August 2026).
 
 ## Run it in one notebook
 

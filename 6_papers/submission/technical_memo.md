@@ -201,14 +201,18 @@ characterises the ice, not the bedrock or the permafrost that also gave way. It 
 one component of the preconditioning, not the whole of it. We would rather say that than
 imply a cryosphere product forecasts rock-slope stability.
 
-Tanager's revisit does not support **early warning** and we do not claim it. It supports
-preconditioning and susceptibility mapping.
+Tanager's revisit does not support **early warning** and we do not claim it. A glacial lake
+can be watched for years; a rock–ice slope gives minutes — which is exactly why the
+monitorable quantity is the preconditioning. That is what this supports.
 
 ## 8 · With more Tanager data
 
 Point it at ice. The tool is built, validated and calibrated; the archive has no glacier to
-run it on. Ten tasked scenes over glaciated hazard corridors — Langtang and the Bhote Koshi
-above Gyirong first, then Cordillera Real above La Paz, the Karakoram, the Caucasus — would
+run it on. The Lhende Khola alone has now flooded twice in thirteen months — a
+supraglacial-lake outburst in July 2025 (DHM/ICIMOD), this rock–ice failure in August 2026:
+two initiation mechanisms, one valley. Ten tasked scenes over glaciated hazard corridors —
+Langtang and the Bhote Koshi above Gyirong first, then Cordillera Real above La Paz, the
+Karakoram, the Caucasus — would
 convert a validated Arctic retrieval into a preconditioning baseline for terrain that is
 actively killing people. Repeat coverage of Sirmilik across a melt season would give the
 30 m pond-evolution time series no spaceborne spectrometer has ever acquired.
