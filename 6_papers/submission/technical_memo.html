@@ -1,0 +1,215 @@
+<!doctype html><html><head><meta charset='utf-8'><style>
+@page { size: A4; margin: 13mm 14mm; }
+body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+       font-size: 8.5pt; line-height: 1.30; color: #0b0b0b; }
+h1 { font-size: 15.5pt; margin: 0 0 1pt 0; line-height: 1.12; }
+h3 { font-size: 10pt; font-weight: 500; color: #52514e; margin: 0 0 6pt 0; }
+h2 { font-size: 10pt; margin: 9pt 0 3pt 0; border-bottom: 1px solid #e6e5e1;
+     padding-bottom: 1.5pt; page-break-after: avoid; }
+p { margin: 3pt 0; }
+table { border-collapse: collapse; width: 100%; font-size: 8.3pt; margin: 4pt 0;
+        page-break-inside: avoid; }
+th, td { border-bottom: 1px solid #e6e5e1; padding: 2pt 5pt; text-align: left; }
+th { color: #52514e; font-weight: 600; }
+blockquote { margin: 5pt 0; padding: 5pt 9pt; background: #f4f7fc;
+             border-left: 3px solid #2a78d6; font-size: 9pt; page-break-inside: avoid; }
+img { width: 78%; display: block; margin: 5pt auto; page-break-inside: avoid; }
+ol, ul { margin: 3pt 0; padding-left: 15pt; }
+li { margin: 1.5pt 0; }
+code { font-family: "SF Mono", Menlo, monospace; font-size: 8.2pt; background: #f2f1ee;
+       padding: 0 2px; border-radius: 2px; }
+hr { border: none; border-top: 1px solid #e6e5e1; margin: 6pt 0; }
+</style></head><body><h1>The open hyperspectral archive has no glaciers in it</h1>
+<h3>A calibrated cryosphere retrieval for Tanager-1, and the case for pointing it at ice</h3>
+<p><strong>Tanager Open Data Competition 2026</strong> · Scene <code>20250606_181248_58_4001</code>, Sirmilik National
+Park, Nunavut · Code, weights, figures and a script that re-checks the headline numbers
+below: see Project Materials.</p>
+<hr />
+<h2>1 · The gap</h2>
+<p>On <strong>26 August 2026</strong> a combined rock and ice slope failure on the north side of Langtang
+Lirung, Nepal, sent bedrock and glacier ice into the Lhende Khola. The debris temporarily
+dammed the river; the impoundment breached, and the flood ran nearly 100 km down the Bhote
+Koshi and Trishuli, destroying the Gyirong border crossing. As of 28 August more than 600
+people were confirmed dead and more than 1,900 were missing in Nepal, with further deaths
+in Gyirong County, Tibet; the toll is still rising.</p>
+<p>Two things it was not. Not a glacial lake outburst flood — no pre-existing lake failed.
+And not a clean glacier detachment of the 2016 Aru type: the scar shows a large volume of
+both ice <strong>and</strong> rock removed. This is the rock–ice avalanche class, the failure mode that
+is becoming more common as high-mountain permafrost degrades and the bedrock holding ice
+onto steep faces loses its cement.</p>
+<p>That class is not a Himalayan problem; it occurs wherever ice sits on a steep slope, and part
+of its preconditioning is cryospheric and therefore spectral — grain coarsening, liquid water,
+impurity-driven albedo loss all change how much energy the ice absorbs. So we asked how often
+a spaceborne imaging spectrometer has looked at the slope that failed.</p>
+<p><strong>Twice in three and a half years.</strong> Of 20 EMIT L2A granules containing the source zone
+(28.2853 N, 85.5252 E), two fall below 55% cloud. The last usable look came <strong>28 months
+before the failure</strong>. The result is insensitive to which of the two published source
+positions is used — they differ by 1.1 km, an EMIT granule is ~75 km across, and both
+return the same 20 granules and the same 28-month gap.</p>
+<p>At 73 N the number is not small but structural: <strong>zero</strong>. EMIT flies on the ISS, which
+reaches only ±52°; PRISMA acquires only within ±70°; EnMAP's proposal-driven archive holds
+no systematic sea-ice coverage. No spaceborne imaging spectrometer systematically observes
+the Arctic sea-ice zone. And querying all <strong>153 scenes</strong> of the Tanager Open STAC catalogue
+(as of 28 August 2026) against the OpenStreetMap glacier layer returns <strong>zero
+intersections</strong>. The open archive contains no glacier.</p>
+<p>That absence is the argument, and the prize is what can fix it.</p>
+<p><img alt="Every EMIT observation of the Langtang source zone" src="../../5_outputs/figures/fig4_observation_gap.png" /></p>
+<h2>2 · What we built, and the Tanager feature that made it possible</h2>
+<p>Since the archive has no glacier, we built and validated the retrieval on the cryosphere
+data that does exist — Arctic sea ice in melt. <code>tanager-cryo</code> inverts Tanager reflectance
+into sub-pixel fractions of solid ice/snow, melt pond and open water; the effective
+absorption length that sets grain size; pond depth; and impurity load. Scenes are read
+through Planet's own <code>xarray-hyperspectral</code> backend.</p>
+<p>Forward model: Kokhanovsky–Zege asymptotic radiative transfer for the solid surface, a
+two-way Beer–Lambert water column over a scattering floor for ponds, ice constants from
+Warren &amp; Brandt (2008), water from Segelstein (1981). There is no field campaign at
+Sirmilik on 2025-06-06, so rather than invent labels the network trains on 150,000 spectra
+from that forward model — standard practice when validation data are absent — and the
+honesty is pushed into the uncertainty instead.</p>
+<p><strong>The decisive Tanager feature is <code>surface_reflectance_uncertainty</code></strong>, the per-pixel,
+per-band 1σ most workflows read past. We used it three times:</p>
+<ol>
+<li><strong>Band selection.</strong> The scene's own SNR spectrum runs 55–235 below 1350 nm and collapses
+   to 3–16 beyond 2000 nm, where ice absorption drives reflectance to the noise floor.
+   Cutting at SNR &gt; 30 keeps 221 bands and lifted the synthetic training distribution's
+   coverage of observed spectra from <strong>92.4% to 99.7%</strong>. Derived, not assumed.</li>
+<li><strong>Noise model.</strong> Training spectra are perturbed by the measured per-band σ, with a
+   per-sample scale so the network must <em>use</em> the σ rather than ignore a constant.</li>
+<li><strong>Error budget</strong>, below.</li>
+</ol>
+<p>The network emits a predictive variance per parameter under a Gaussian NLL. This matters
+because three of six parameters are only <em>conditionally</em> identifiable — pond depth is
+meaningless where there is no pond. A point estimator returns confident nonsense there.</p>
+<h2>3 · Accuracy, calibration, and why neither was enough</h2>
+<p>On 30,000 held-out synthetic spectra: melt pond fraction RMSE 0.0062, snow/ice 0.0165,
+open water 0.0185, and — evaluated where the host endmember is present — absorption length
+(log₁₀ m) 0.0224, <strong>melt pond depth 10.1 mm</strong>, impurity load 5.62. Across all six parameters
+the variance of the standardised residual is <strong>1.05–1.08</strong> against a nominal 1.0, with 68%
+and 95% coverage at 0.65–0.70 and 0.94–0.96 against nominal 0.683 and 0.950 — the usual
+failure of a heteroscedastic network, severe unflagged overconfidence, is reduced here to a
+quantified few per cent.</p>
+<p>Those are the numbers after the correction described in §4. Before it, the same tables read
+better — pond fraction RMSE 0.0030, R² = 1.000 on every parameter, calibration equally
+clean. <strong>The flattering version was wrong, and no synthetic test could have told us.</strong></p>
+<h2>4 · The check that caught it</h2>
+<p>Sentinel-2C imaged this scene at 17:43:35 UTC on 2025-06-06; Tanager at 18:12:48. <strong>Twenty-nine
+minutes apart.</strong> Both products sit in EPSG:32617 and Tanager's 30 m pixel edges fall on
+Sentinel-2's 10 m grid lines, so every Tanager pixel contains exactly 3×3 Sentinel-2 pixels
+with no resampling anywhere in the comparison. Tanager infers the sub-pixel fractions
+<em>spectrally</em>, by unmixing; Sentinel-2 resolves them <em>spatially</em>. Different information
+channel, same ground, same minute.</p>
+<p>(ICESat-2 was the first choice — an active laser is a cleaner reference. All three tracks
+crossing this scene in June 2025 are flagged 100% cloud-covered, every height a fill value.
+The Arctic is hard to observe from orbit; that is the theme of this memo.)</p>
+<p>The first comparison came back <strong>anti-correlated</strong>: r = −0.68 on the solid fraction. A
+green-band cross-check ruled out geometry — Tanager and Sentinel-2 green agree at r = 0.814
+with zero offset, and a shift test confirms the alignment. The disagreement was real, and
+its cause was a domain gap invisible from inside the synthetic world: Tanager's instrument σ
+is 0.0013, but the forward model reproduces real sea-ice reflectance only to about 0.03. The
+network had been trained under noise up to 0.005 and was being asked, at inference, to
+interpret spectra deviating from its training manifold by five times that.</p>
+<p>White noise at the right amplitude would have been the wrong repair — it teaches a network
+to be uncertain, not robust, and forward-model error is not white but a smooth bias in
+spectral <em>shape</em>. Training was reworked to inject smooth perturbations built from low-order
+Legendre polynomials, scaled to that measured 0.03. The perturbations are 16× smoother
+band-to-band than white noise of the same amplitude, and lifted synthetic coverage of the
+observed spectra the last of the way, 99.7% to 100%. Synthetic scores got worse, as they should. The comparison
+with Sentinel-2 flipped sign.</p>
+<p><strong>Where it now stands.</strong> Spearman ρ = <strong>+0.860</strong> on the dark-surface fraction, monotonic
+across all ten bins, and still r = +0.73 with the dense high-high cluster removed — not an
+artefact of one corner. But the binned mean of Tanager spans only 0.55–0.90 across
+Sentinel-2's 0.05–0.95, and reads <strong>+0.29 high</strong> on average.</p>
+<p>That residual disagreement is a physical limit, not a bug, and we chased it far enough to
+say so. Over pixels Sentinel-2 resolves as continuous ice, the observed spectrum has exactly
+the <em>shape</em> of the semi-infinite model at half its amplitude: the observed/modelled ratio is
+0.52 at 421 nm and 0.52 at 1032 nm. A grey darkening like that is what thin ice over dark
+ocean produces — and it is mathematically indistinguishable from mixing in open water. We
+implemented a finite-thickness ice endmember to separate them; it bought no identifiability,
+only a relabelling, and its transmittance shape fits the observations at RMSE 0.195. <strong>At
+30 m, passive optics cannot separate open water from thin dark ice.</strong> The retrieval's
+"open water" is really a dark-surface fraction, and we report it as such.</p>
+<h2>5 · A real scene, including where it fails</h2>
+<p>Sirmilik, 2025-06-06: 332,535 valid pixels. Medians 0.28 solid, 0.16 pond, 0.56 dark
+surface, pond depth 0.05 m — read the dark fraction with §4 in mind.</p>
+<p>We do not trust a network that returns a number for every pixel. Retrieved parameters are
+pushed back through the forward model and compared to the observation under a combined
+error budget. That exposed the most useful number in this work:</p>
+<blockquote>
+<p><strong>Forward-model error 0.0354 in reflectance; Tanager instrument σ 0.0013.
+The retrieval is forward-model limited by a factor of 27.</strong></p>
+</blockquote>
+<p>Tanager resolves structure a three-endmember model cannot yet exploit. Weighting the fit by
+instrument σ alone rejects every pixel, because it asks a 3.5% model to agree with a 0.1%
+measurement. With both terms, <strong>30.1%</strong> of pixels are explained at χ²ᵥ ≤ 4. What is rejected
+is largely the snow-covered <strong>land</strong> in the south of the scene, which an ice model has no
+business describing — the goodness-of-fit panel finds that boundary unaided.</p>
+<p><img alt="Independent check against same-day Sentinel-2" src="../../5_outputs/figures/fig6_s2_validation.png" /></p>
+<h2>6 · What the spectrum buys</h2>
+<p>Sentinel-2 is the right comparison for polar work: free, near-daily at 73 N, and the sensor
+operational sea-ice products run on. EMIT cannot be compared at all — it cannot see this
+latitude. We degrade Tanager to Sentinel-2's 10 L2A bands with the official ESA response
+functions (COPE-GSEG-EOPG-TN-15-0007), holding scenes, forward model, architecture,
+schedule and seeds fixed. Noise propagation favours Sentinel-2, so these are lower bounds.</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Penalty for using Sentinel-2's bands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Grain size (log₁₀ L)</strong></td>
+<td><strong>13.1×</strong></td>
+</tr>
+<tr>
+<td>Impurity load</td>
+<td>5.5×</td>
+</tr>
+<tr>
+<td>Melt pond fraction</td>
+<td>5.2×</td>
+</tr>
+<tr>
+<td>Snow / ice fraction</td>
+<td>4.8×</td>
+</tr>
+<tr>
+<td>Open water fraction</td>
+<td>4.1×</td>
+</tr>
+<tr>
+<td>Melt pond depth</td>
+<td>1.8×</td>
+</tr>
+</tbody>
+</table>
+<p>Grain size degrades most because it lives in the ice absorption features at 1030 and
+1240 nm, and Sentinel-2 L2A has nothing between 865 and 1614 nm. Pond depth degrades least,
+1.8×, because Sentinel-2 does carry six red/near-infrared bands — we report that rather
+than round it away.</p>
+<h2>7 · Limits we are not hiding</h2>
+<p>Sea ice is an <strong>analogue, not the target</strong>; the archive gave no alternative, and that is the
+point. The retrieved <strong>"open water" is a dark-surface fraction</strong> that includes thin ice, per
+§4; treat it as such. The per-class check is weaker still for ponds: against a hard
+Sentinel-2 classification, whose thresholds score partially wet 10 m pixels as dry, the
+pond fraction anti-correlates (r = −0.34); only the combined dark fraction supports a clean
+cross-instrument comparison, which is why §4 reports that. <strong>Impurity load should be read with caution</strong> — the forward model runs
+0.03–0.06 dark in the visible and this parameter is best placed to absorb that bias. Grain
+diameter converts from absorption length through a stated shape factor (B = 3.62), carried
+as a file attribute. Coarse-resolution pond retrieval is a mature field (MERIS, MODIS,
+OLCI); what is new here is <strong>spaceborne 30 m with calibrated per-pixel uncertainty and an
+independent same-day cross-check</strong>.</p>
+<p>And the honest scoping point: Langtang was a <strong>rock–ice</strong> failure. This retrieval
+characterises the ice, not the bedrock or the permafrost that also gave way. It addresses
+one component of the preconditioning, not the whole of it. We would rather say that than
+imply a cryosphere product forecasts rock-slope stability.</p>
+<p>Tanager's revisit does not support <strong>early warning</strong> and we do not claim it. It supports
+preconditioning and susceptibility mapping.</p>
+<h2>8 · With more Tanager data</h2>
+<p>Point it at ice. The tool is built, validated and calibrated; the archive has no glacier to
+run it on. Ten tasked scenes over glaciated hazard corridors — Langtang and the Bhote Koshi
+above Gyirong first, then Cordillera Real above La Paz, the Karakoram, the Caucasus — would
+convert a validated Arctic retrieval into a preconditioning baseline for terrain that is
+actively killing people. Repeat coverage of Sirmilik across a melt season would give the
+30 m pond-evolution time series no spaceborne spectrometer has ever acquired.</p></body></html>

@@ -1,0 +1,131 @@
+{
+  "config": {
+    "n": 150000,
+    "n_val": 30000,
+    "epochs": 60,
+    "batch": 512,
+    "lr": 0.002,
+    "width": 256,
+    "seed": 0,
+    "mu0": 0.624,
+    "out": "/Users/seantang/Desktop/PBC_Tanager_Open_Data/5_outputs/sensor_comparison.json"
+  },
+  "n_bands_tanager": 221,
+  "n_bands_sentinel2": 10,
+  "sentinel2_bands": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B8A",
+    "B11"
+  ],
+  "detail": {
+    "tanager": {
+      "f_solid": {
+        "rmse": 0.004079238045960665,
+        "r2": 0.9998237490653992
+      },
+      "f_pond": {
+        "rmse": 0.002998631214722991,
+        "r2": 0.999904215335846
+      },
+      "f_water": {
+        "rmse": 0.005303728859871626,
+        "r2": 0.9997026920318604
+      },
+      "log10_absorption_length_m": {
+        "rmse": 0.21425893902778625,
+        "r2": 0.9549099206924438,
+        "rmse_conditional": 0.006071878131479025,
+        "r2_conditional": 0.9999637603759766
+      },
+      "pond_depth_m": {
+        "rmse": 0.08772271871566772,
+        "r2": 0.8479588031768799,
+        "rmse_conditional": 0.008394232951104641,
+        "r2_conditional": 0.9986103177070618
+      },
+      "lap_load": {
+        "rmse": 11.703326225280762,
+        "r2": 0.7424808740615845,
+        "rmse_conditional": 2.7320330142974854,
+        "r2_conditional": 0.9859910607337952
+      }
+    },
+    "sentinel2": {
+      "f_solid": {
+        "rmse": 0.019692545756697655,
+        "r2": 0.9958925843238831
+      },
+      "f_pond": {
+        "rmse": 0.01562957651913166,
+        "r2": 0.9973971843719482
+      },
+      "f_water": {
+        "rmse": 0.02188219502568245,
+        "r2": 0.9949394464492798
+      },
+      "log10_absorption_length_m": {
+        "rmse": 0.26409411430358887,
+        "r2": 0.9314953088760376,
+        "rmse_conditional": 0.07930969446897507,
+        "r2_conditional": 0.9938121438026428
+      },
+      "pond_depth_m": {
+        "rmse": 0.10700587928295135,
+        "r2": 0.7737688422203064,
+        "rmse_conditional": 0.014899229630827904,
+        "r2_conditional": 0.9956219792366028
+      },
+      "lap_load": {
+        "rmse": 18.765899658203125,
+        "r2": 0.3378908038139343,
+        "rmse_conditional": 14.89957046508789,
+        "r2_conditional": 0.5833409428596497
+      }
+    }
+  },
+  "summary": {
+    "f_solid": {
+      "tanager_rmse": 0.004079238045960665,
+      "sentinel2_rmse": 0.019692545756697655,
+      "ratio": 4.8275059054711384,
+      "metric": "rmse"
+    },
+    "f_pond": {
+      "tanager_rmse": 0.002998631214722991,
+      "sentinel2_rmse": 0.01562957651913166,
+      "ratio": 5.212236984125271,
+      "metric": "rmse"
+    },
+    "f_water": {
+      "tanager_rmse": 0.005303728859871626,
+      "sentinel2_rmse": 0.02188219502568245,
+      "ratio": 4.1258132917096555,
+      "metric": "rmse"
+    },
+    "log10_absorption_length_m": {
+      "tanager_rmse": 0.006071878131479025,
+      "sentinel2_rmse": 0.07930969446897507,
+      "ratio": 13.061806042812709,
+      "metric": "rmse_conditional"
+    },
+    "pond_depth_m": {
+      "tanager_rmse": 0.008394232951104641,
+      "sentinel2_rmse": 0.014899229630827904,
+      "ratio": 1.7749364018861589,
+      "metric": "rmse_conditional"
+    },
+    "lap_load": {
+      "tanager_rmse": 2.7320330142974854,
+      "sentinel2_rmse": 14.89957046508789,
+      "ratio": 5.453656814216488,
+      "metric": "rmse_conditional"
+    }
+  }
+}

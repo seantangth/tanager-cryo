@@ -1,0 +1,9 @@
+{
+  "n_train": 150000,
+  "epochs": 80,
+  "bands": 221,
+  "wavelength_min_nm": 381.4100036621094,
+  "wavelength_max_nm": 1777.5899658203125,
+  "snr_threshold": 30.0,
+  "best_val_nll": -2.6154141426086426
+}

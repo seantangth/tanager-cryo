@@ -1,0 +1,19 @@
+# Scene data — public, large, and re-downloadable with `python -m tanager_cryo.fetch`
+1_data/raw/
+*.h5
+*.nc
+!5_outputs/sirmilik_retrieval.nc
+!5_outputs/s2_validation.nc
+
+# Private working notes — not part of the submission
+notes/
+
+# Environment
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Intermediate
+*.tif
+!5_outputs/figures/*.png

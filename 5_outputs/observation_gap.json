@@ -1,0 +1,161 @@
+{
+  "langtang": {
+    "site": {
+      "lon": 85.52515461726692,
+      "lat": 28.28531746075177
+    },
+    "failure_date": "2026-08-26",
+    "summary": {
+      "n_observations": 20,
+      "n_usable": 2,
+      "usable_cloud_max": 55.0,
+      "first": "2023-02-02",
+      "last": "2025-10-23",
+      "usable_dates": [
+        [
+          "2024-04-02",
+          39.0
+        ],
+        [
+          "2024-04-06",
+          53.0
+        ]
+      ],
+      "last_observation_before_failure": "2025-10-23",
+      "last_usable_before_failure": "2024-04-06"
+    },
+    "records": [
+      {
+        "time": "2023-02-02",
+        "cloud_cover": 98.0,
+        "granule": null
+      },
+      {
+        "time": "2023-04-01",
+        "cloud_cover": 91.0,
+        "granule": null
+      },
+      {
+        "time": "2023-04-05",
+        "cloud_cover": 92.0,
+        "granule": null
+      },
+      {
+        "time": "2023-06-01",
+        "cloud_cover": 63.0,
+        "granule": null
+      },
+      {
+        "time": "2023-06-23",
+        "cloud_cover": 88.0,
+        "granule": null
+      },
+      {
+        "time": "2023-08-27",
+        "cloud_cover": 84.0,
+        "granule": null
+      },
+      {
+        "time": "2023-10-05",
+        "cloud_cover": 87.0,
+        "granule": null
+      },
+      {
+        "time": "2024-02-19",
+        "cloud_cover": 93.0,
+        "granule": null
+      },
+      {
+        "time": "2024-04-02",
+        "cloud_cover": 39.0,
+        "granule": null
+      },
+      {
+        "time": "2024-04-06",
+        "cloud_cover": 53.0,
+        "granule": null
+      },
+      {
+        "time": "2024-04-06",
+        "cloud_cover": 83.0,
+        "granule": null
+      },
+      {
+        "time": "2024-04-28",
+        "cloud_cover": 72.0,
+        "granule": null
+      },
+      {
+        "time": "2024-08-15",
+        "cloud_cover": 82.0,
+        "granule": null
+      },
+      {
+        "time": "2024-10-01",
+        "cloud_cover": 81.0,
+        "granule": null
+      },
+      {
+        "time": "2025-02-02",
+        "cloud_cover": 98.0,
+        "granule": null
+      },
+      {
+        "time": "2025-06-16",
+        "cloud_cover": 96.0,
+        "granule": null
+      },
+      {
+        "time": "2025-07-28",
+        "cloud_cover": 87.0,
+        "granule": null
+      },
+      {
+        "time": "2025-08-23",
+        "cloud_cover": 100.0,
+        "granule": null
+      },
+      {
+        "time": "2025-10-19",
+        "cloud_cover": 72.0,
+        "granule": null
+      },
+      {
+        "time": "2025-10-23",
+        "cloud_cover": 82.0,
+        "granule": null
+      }
+    ],
+    "alt_position": {
+      "lon": 85.5194,
+      "lat": 28.2765,
+      "summary": {
+        "n_observations": 20,
+        "n_usable": 2,
+        "usable_cloud_max": 55.0,
+        "first": "2023-02-02",
+        "last": "2025-10-23",
+        "usable_dates": [
+          [
+            "2024-04-02",
+            39.0
+          ],
+          [
+            "2024-04-06",
+            53.0
+          ]
+        ],
+        "last_observation_before_failure": "2025-10-23",
+        "last_usable_before_failure": "2024-04-06"
+      },
+      "same_headline_result": true
+    }
+  },
+  "sirmilik": {
+    "latitude": 73.72,
+    "emit_latitude_limit": 52.0,
+    "emit_can_observe": false,
+    "n_observations": 0,
+    "reason": "the ISS orbit reaches only about +/- 52 degrees, so EMIT never overflies this latitude; PRISMA acquires only within +/- 70 degrees, and EnMAP's proposal-driven tasked archive holds no systematic sea-ice coverage"
+  }
+}

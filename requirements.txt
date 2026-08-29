@@ -1,0 +1,25 @@
+# Core
+numpy>=2.0
+scipy>=1.11
+xarray>=2024.1
+h5py>=3.10
+netCDF4>=1.6
+rioxarray>=0.15
+
+# Planet's official Tanager reader (xarray backend engine "tanager")
+xarray-hyperspectral>=0.1
+
+# Geometry and CRS handling
+geopandas>=1.0
+shapely>=2.0
+pyproj>=3.6
+
+# Model
+torch>=2.2
+scikit-learn>=1.4
+
+# Figures
+matplotlib>=3.8
+
+# Reading the ESA Sentinel-2 SRF workbook
+openpyxl>=3.1
