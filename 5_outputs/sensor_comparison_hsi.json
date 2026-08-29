@@ -1,0 +1,184 @@
+{
+  "config": {
+    "n": 150000,
+    "n_val": 30000,
+    "epochs": 60,
+    "batch": 512,
+    "lr": 0.002,
+    "width": 256,
+    "seed": 0,
+    "mu0": 0.624,
+    "out": "/Users/seantang/Desktop/PBC_Tanager_Open_Data/5_outputs/sensor_comparison_hsi.json"
+  },
+  "band_models": {
+    "emit": {
+      "sampling": 7.4,
+      "fwhm": 8.5,
+      "start": 381.0,
+      "note": "on-orbit values, Green et al. 2023"
+    },
+    "prisma": {
+      "sampling": 11.0,
+      "fwhm": 12.0,
+      "start": 402.0,
+      "note": "nominal values, Cogliati et al. 2021"
+    }
+  },
+  "evaluation_interval_nm": [
+    381.4100036621094,
+    1777.5899658203125
+  ],
+  "n_bands": {
+    "tanager": 221,
+    "emit": 150,
+    "prisma": 100
+  },
+  "detail": {
+    "tanager": {
+      "f_solid": {
+        "rmse": 0.01765836589038372,
+        "r2": 0.9966973066329956
+      },
+      "f_pond": {
+        "rmse": 0.006456073839217424,
+        "r2": 0.9995558857917786
+      },
+      "f_water": {
+        "rmse": 0.019640380516648293,
+        "r2": 0.9959232211112976
+      },
+      "log10_absorption_length_m": {
+        "rmse": 0.3302380442619324,
+        "r2": 0.89288330078125,
+        "rmse_conditional": 0.024196945130825043,
+        "r2_conditional": 0.9994240403175354
+      },
+      "pond_depth_m": {
+        "rmse": 0.09028373658657074,
+        "r2": 0.8389517068862915,
+        "rmse_conditional": 0.010456756688654423,
+        "r2_conditional": 0.9978435039520264
+      },
+      "lap_load": {
+        "rmse": 14.259808540344238,
+        "r2": 0.6176877617835999,
+        "rmse_conditional": 6.169086933135986,
+        "r2_conditional": 0.9285709261894226
+      }
+    },
+    "emit": {
+      "f_solid": {
+        "rmse": 0.017894869670271873,
+        "r2": 0.9966082572937012
+      },
+      "f_pond": {
+        "rmse": 0.00637365086004138,
+        "r2": 0.9995671510696411
+      },
+      "f_water": {
+        "rmse": 0.01991298235952854,
+        "r2": 0.9958092570304871
+      },
+      "log10_absorption_length_m": {
+        "rmse": 0.33618226647377014,
+        "r2": 0.888992428779602,
+        "rmse_conditional": 0.02302572689950466,
+        "r2_conditional": 0.9994783997535706
+      },
+      "pond_depth_m": {
+        "rmse": 0.09139640629291534,
+        "r2": 0.8349576592445374,
+        "rmse_conditional": 0.010302873328328133,
+        "r2_conditional": 0.997906506061554
+      },
+      "lap_load": {
+        "rmse": 14.180611610412598,
+        "r2": 0.6219225525856018,
+        "rmse_conditional": 5.958505630493164,
+        "r2_conditional": 0.9333641529083252
+      }
+    },
+    "prisma": {
+      "f_solid": {
+        "rmse": 0.018154002726078033,
+        "r2": 0.996509313583374
+      },
+      "f_pond": {
+        "rmse": 0.006473158951848745,
+        "r2": 0.9995535612106323
+      },
+      "f_water": {
+        "rmse": 0.0201717521995306,
+        "r2": 0.9956996440887451
+      },
+      "log10_absorption_length_m": {
+        "rmse": 0.34284326434135437,
+        "r2": 0.8845499157905579,
+        "rmse_conditional": 0.02403758279979229,
+        "r2_conditional": 0.9994316101074219
+      },
+      "pond_depth_m": {
+        "rmse": 0.09199556708335876,
+        "r2": 0.8327866196632385,
+        "rmse_conditional": 0.01037557888776064,
+        "r2_conditional": 0.9978768825531006
+      },
+      "lap_load": {
+        "rmse": 14.291244506835938,
+        "r2": 0.6160002946853638,
+        "rmse_conditional": 6.235729217529297,
+        "r2_conditional": 0.9270193576812744
+      }
+    }
+  },
+  "summary": {
+    "f_solid": {
+      "metric": "rmse",
+      "tanager_rmse": 0.01765836589038372,
+      "emit_rmse": 0.017894869670271873,
+      "emit_ratio": 1.0133932993209154,
+      "prisma_rmse": 0.018154002726078033,
+      "prisma_ratio": 1.028068103173931
+    },
+    "f_pond": {
+      "metric": "rmse",
+      "tanager_rmse": 0.006456073839217424,
+      "emit_rmse": 0.00637365086004138,
+      "emit_ratio": 0.9872332657232998,
+      "prisma_rmse": 0.006473158951848745,
+      "prisma_ratio": 1.0026463626434285
+    },
+    "f_water": {
+      "metric": "rmse",
+      "tanager_rmse": 0.019640380516648293,
+      "emit_rmse": 0.01991298235952854,
+      "emit_ratio": 1.0138796619876675,
+      "prisma_rmse": 0.0201717521995306,
+      "prisma_ratio": 1.02705506048785
+    },
+    "log10_absorption_length_m": {
+      "metric": "rmse_conditional",
+      "tanager_rmse": 0.024196945130825043,
+      "emit_rmse": 0.02302572689950466,
+      "emit_ratio": 0.9515964422373162,
+      "prisma_rmse": 0.02403758279979229,
+      "prisma_ratio": 0.9934139483240082
+    },
+    "pond_depth_m": {
+      "metric": "rmse_conditional",
+      "tanager_rmse": 0.010456756688654423,
+      "emit_rmse": 0.010302873328328133,
+      "emit_ratio": 0.9852838346623046,
+      "prisma_rmse": 0.01037557888776064,
+      "prisma_ratio": 0.9922368088585382
+    },
+    "lap_load": {
+      "metric": "rmse_conditional",
+      "tanager_rmse": 6.169086933135986,
+      "emit_rmse": 5.958505630493164,
+      "emit_ratio": 0.9658650777780861,
+      "prisma_rmse": 6.235729217529297,
+      "prisma_ratio": 1.01080261716452
+    }
+  }
+}

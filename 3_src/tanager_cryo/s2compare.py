@@ -2,9 +2,10 @@
 
 Sentinel-2 is the right comparison for a cryosphere product. It is the sensor operational
 snow and sea-ice work actually runs on: free, near-daily at 73 N because the orbits
-converge, and 10-20 m. EMIT cannot be the comparison here at all -- the ISS orbit stops
-at 52 degrees, so no spaceborne public imaging spectrometer sees this scene. That fact is
-itself part of the argument for tasking Tanager to the poles.
+converge, and 10-20 m. EMIT cannot acquire this scene at all (the ISS orbit stops at
+52 degrees) and PRISMA stops at 70 degrees; ``experiment_hsi`` quantifies those two
+band sets on synthetic spectra instead. That absence of a real hyperspectral peer at
+this latitude is itself part of the argument for tasking Tanager to the poles.
 
 Method
 ------

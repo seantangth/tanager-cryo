@@ -68,6 +68,16 @@ def main() -> int:
     ):
         check(f"RMSE ratio, {key}", c["summary"][key]["ratio"], expected, tol=0.06)
 
+    h = json.loads((OUT / "sensor_comparison_hsi.json").read_text())
+    check("EMIT synthetic bands", h["n_bands"]["emit"], 150)
+    check("PRISMA synthetic bands", h["n_bands"]["prisma"], 100)
+    hsi_ratios = [
+        h["summary"][nm][f"{s}_ratio"]
+        for nm in h["summary"] for s in ("emit", "prisma")
+    ]
+    check("EMIT/PRISMA ratio minimum", min(hsi_ratios), 0.95, tol=0.01)
+    check("EMIT/PRISMA ratio maximum", max(hsi_ratios), 1.03, tol=0.01)
+
     print("\nscene retrieval")
     import xarray as xr
 

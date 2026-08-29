@@ -157,10 +157,14 @@ business describing — the goodness-of-fit panel finds that boundary unaided.
 ## 6 · What the spectrum buys
 
 Sentinel-2 is the right comparison for polar work: free, near-daily at 73 N, and the sensor
-operational sea-ice products run on. EMIT cannot be compared at all — it cannot see this
-latitude. We degrade Tanager to Sentinel-2's 10 L2A bands with the official ESA response
-functions (COPE-GSEG-EOPG-TN-15-0007), holding scenes, forward model, architecture,
-schedule and seeds fixed. Noise propagation favours Sentinel-2, so these are lower bounds.
+operational sea-ice products run on. EMIT and PRISMA cannot acquire this scene (±52° and
+±70°), so we quantify their *band sets* instead: degrading Tanager to each sensor's
+published sampling and FWHM under the identical protocol leaves retrieval skill
+statistically unchanged — RMSE ratios **0.95–1.03** across all six parameters. The Arctic
+gap is orbital, not spectral. Sentinel-2's 10 L2A bands are another matter. Degrading with
+the official ESA response functions (COPE-GSEG-EOPG-TN-15-0007), holding scenes, forward
+model, architecture, schedule and seeds fixed — noise propagation favouring the degraded
+sensor throughout, so every penalty is a lower bound:
 
 | Quantity | Penalty for using Sentinel-2's bands |
 |---|---|
@@ -174,7 +178,9 @@ schedule and seeds fixed. Noise propagation favours Sentinel-2, so these are low
 Grain size degrades most because it lives in the ice absorption features at 1030 and
 1240 nm, and Sentinel-2 L2A has nothing between 865 and 1614 nm. Pond depth degrades least,
 1.8×, because Sentinel-2 does carry six red/near-infrared bands — we report that rather
-than round it away.
+than round it away. The cliff sits between multispectral and imaging spectroscopy, not
+between 7.4 and 5 nm sampling: a spectrally equivalent public sensor already exists — it
+simply cannot see the Arctic.
 
 ## 7 · Limits we are not hiding
 

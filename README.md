@@ -109,6 +109,14 @@ response functions and holding scenes, forward model, architecture, schedule and
 Grain size degrades 13× because it lives in the ice absorption features at 1030 and 1240 nm,
 and Sentinel-2 L2A has nothing between 865 and 1614 nm.
 
+**Against EMIT and PRISMA**, which cannot acquire this latitude (±52° and ±70°), the same
+protocol run on their *band sets* — Gaussian response functions at the published
+7.4 nm sampling / 8.5 nm FWHM (EMIT) and 11 nm / 12 nm (PRISMA), `experiment_hsi.py` —
+leaves retrieval skill statistically unchanged: RMSE ratios **0.95–1.03** across all six
+parameters (`5_outputs/sensor_comparison_hsi.json`). The Arctic observation gap is
+**orbital, not spectral**: the cliff sits between multispectral and imaging spectroscopy,
+and the imaging spectrometer that can reach the Arctic is Tanager.
+
 ## The Tanager feature that made the difference
 
 ![Why hyperspectral](5_outputs/figures/fig3_why_hyperspectral.png)
@@ -186,6 +194,7 @@ python -m tanager_cryo.evaluate        # accuracy + calibration
 python -m tanager_cryo.retrieve --scene 1_data/raw/sirmilik/20250606_181248_58_4001_sr.h5 \
                                 --out   5_outputs/sirmilik_retrieval.nc
 python -m tanager_cryo.experiment_s2   # Tanager vs Sentinel-2
+python -m tanager_cryo.experiment_hsi  # Tanager vs the EMIT / PRISMA band sets
 python -m tanager_cryo.observation_gap # EMIT coverage of the Langtang source zone
 python -m tanager_cryo.glacier_check   # optional, ~10 min: full-catalogue glacier audit
 python -m tanager_cryo.s2_validate --s2-json 1_data/raw/s2_item.json   # independent check
@@ -209,7 +218,8 @@ backend, not a bespoke reader.
   residual.py          forward-reconstruction goodness of fit; combined error budget
   retrieve.py          apply to a scene -> georeferenced NetCDF with uncertainty
   s2compare.py         ESA Sentinel-2A SRF convolution
-  experiment_s2.py     controlled degradation experiment
+  experiment_s2.py     controlled degradation experiment vs Sentinel-2
+  experiment_hsi.py    the same experiment vs the EMIT and PRISMA band sets
   observation_gap.py   EMIT coverage audit via NASA CMR
   glacier_check.py     full-catalogue glacier audit via OSM Overpass
   s2_validate.py       independent validation against same-day Sentinel-2 at 10 m
