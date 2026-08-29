@@ -202,8 +202,11 @@ one component of the preconditioning, not the whole of it. We would rather say t
 imply a cryosphere product forecasts rock-slope stability.
 
 Tanager's revisit does not support **early warning** and we do not claim it. A glacial lake
-can be watched for years; a rock–ice slope gives minutes — which is exactly why the
-monitorable quantity is the preconditioning. That is what this supports.
+can be watched for years; a rock–ice slope gives minutes, and warning on that timescale
+belongs to deformation and downstream hydrology — InSAR creep, ground instruments, river
+gauges and SMS. Preconditioning is the layer above those, and it is the one that scales: no
+agency can instrument a mountain range, but it can instrument fifty slopes. **The practical
+use of this retrieval is choosing which fifty.**
 
 ## 8 · With more Tanager data
 

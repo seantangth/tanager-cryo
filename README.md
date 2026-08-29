@@ -156,9 +156,12 @@ workflows read past. It is used three times here:
 - Melt pond retrieval at coarse resolution is a mature field (MERIS, MODIS, OLCI). What is
   new is **spaceborne 30 m with calibrated per-pixel uncertainty**.
 - This does **not** support early warning and we do not claim it. A glacial lake can be
-  watched for years; a rock–ice slope gives minutes — which is exactly why the monitorable
-  quantity is the preconditioning. The Lhende Khola valley has now flooded twice in
-  thirteen months by two different mechanisms (a supraglacial-lake outburst in July 2025,
+  watched for years; a rock–ice slope gives minutes, and warning on that timescale belongs
+  to deformation and downstream hydrology — InSAR creep, ground instruments, river gauges
+  and SMS. Preconditioning is the layer above those, and the one that scales: no agency can
+  instrument a mountain range, but it can instrument fifty slopes, and **the practical use
+  of this retrieval is choosing which fifty**. The Lhende Khola valley has now flooded twice
+  in thirteen months by two different mechanisms (a supraglacial-lake outburst in July 2025,
   this rock–ice failure in August 2026).
 
 ## Run it in one notebook
