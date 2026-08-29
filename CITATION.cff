@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+title: "tanager-cryo: a calibrated cryosphere retrieval for Planet Tanager-1"
+message: "If you use this software or its derived data products, please cite it."
+type: software
+authors:
+  - family-names: Tang
+    given-names: Sean
+repository-code: "https://github.com/seantangth/tanager-cryo"
+url: "https://seantangth.github.io/tanager-cryo/"
+abstract: >-
+  A physics-based retrieval that inverts Planet Tanager-1 surface reflectance into
+  sub-pixel fractions of solid ice/snow, melt pond and dark surface, together with
+  effective absorption length (grain size), melt pond depth and light-absorbing
+  particle load, with a calibrated per-pixel uncertainty on every quantity.
+  Demonstrated on Arctic sea ice in melt at Sirmilik National Park, Nunavut, and
+  validated against same-day Sentinel-2C imagery acquired 29 minutes apart.
+keywords:
+  - hyperspectral
+  - imaging spectroscopy
+  - cryosphere
+  - sea ice
+  - melt ponds
+  - remote sensing
+  - Tanager-1
+  - uncertainty quantification
+license: Apache-2.0
+references:
+  - type: article
+    authors:
+      - family-names: Warren
+        given-names: Stephen G.
+      - family-names: Brandt
+        given-names: Richard E.
+    title: "Optical constants of ice from the ultraviolet to the microwave: A revised compilation"
+    journal: "Journal of Geophysical Research: Atmospheres"
+    volume: 113
+    year: 2008
+    doi: 10.1029/2007JD009744
+  - type: thesis
+    authors:
+      - family-names: Segelstein
+        given-names: David J.
+    title: "The complex refractive index of water"
+    institution:
+      name: "University of Missouri-Kansas City"
+    year: 1981

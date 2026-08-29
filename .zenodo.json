@@ -1,0 +1,40 @@
+{
+  "title": "tanager-cryo: a calibrated cryosphere retrieval for Planet Tanager-1",
+  "description": "<p>A physics-based retrieval that inverts Planet Tanager-1 surface reflectance into sub-pixel fractions of solid ice/snow, melt pond and dark surface, together with effective absorption length (grain size), melt pond depth and light-absorbing particle load &mdash; with a calibrated per-pixel uncertainty on every quantity.</p><p>Demonstrated on Arctic sea ice in melt (Sirmilik National Park, Nunavut, 2025-06-06) and validated against same-day Sentinel-2C imagery acquired 29 minutes apart. Includes a controlled band-degradation experiment against Sentinel-2, EMIT and PRISMA, an audit of EMIT coverage over the 2026-08-26 Langtang rock-ice failure via NASA CMR, and a full-catalogue audit showing that none of the 153 scenes in the Tanager Open STAC catalogue intersects a mapped glacier.</p><p>Submission to the Planet Tanager Open Data Competition 2026.</p>",
+  "upload_type": "software",
+  "license": "Apache-2.0",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Tang, Sean"
+    }
+  ],
+  "keywords": [
+    "hyperspectral",
+    "imaging spectroscopy",
+    "cryosphere",
+    "sea ice",
+    "melt ponds",
+    "remote sensing",
+    "Tanager-1",
+    "Planet Labs",
+    "uncertainty quantification",
+    "radiative transfer",
+    "Sentinel-2"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/seantangth/tanager-cryo",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www.planet.com/data/stac",
+      "relation": "isDerivedFrom",
+      "resource_type": "dataset",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Tanager imagery: Tanager STAC Data, available at www.planet.com/data/stac, (c) 2025 Planet Labs PBC, used under CC-BY 4.0. Ice optical constants from Warren & Brandt (2008); liquid water from Segelstein (1981); Sentinel-2A spectral response functions from ESA COPE-GSEG-EOPG-TN-15-0007. Code is Apache-2.0; derived data products are CC-BY 4.0."
+}

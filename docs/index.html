@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tanager-cryo · what the spectrum buys</title>
+<meta name="description" content="An interactive companion to the Tanager Open Data Competition submission: drag the physical state of sea ice and watch what 221 bands see that 10 cannot.">
+<style>
+  :root {
+    color-scheme: light;
+    --page:           #f9f9f7;
+    --surface:        #fcfcfb;
+    --ink:            #0b0b0b;
+    --ink-2:          #52514e;
+    --ink-muted:      #898781;
+    --grid:           #e1e0d9;
+    --axis:           #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6;
+    --series-2:       #eb6834;
+    --blind:          rgba(11,11,11,0.045);
+    --accent-soft:    #eef4fd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page:        #0d0d0d;
+      --surface:     #1a1a19;
+      --ink:         #ffffff;
+      --ink-2:       #c3c2b7;
+      --ink-muted:   #898781;
+      --grid:        #2c2c2a;
+      --axis:        #383835;
+      --border:      rgba(255,255,255,0.10);
+      --series-1:    #3987e5;
+      --series-2:    #d95926;
+      --blind:       rgba(255,255,255,0.05);
+      --accent-soft: #15243a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page:        #0d0d0d;
+    --surface:     #1a1a19;
+    --ink:         #ffffff;
+    --ink-2:       #c3c2b7;
+    --ink-muted:   #898781;
+    --grid:        #2c2c2a;
+    --axis:        #383835;
+    --border:      rgba(255,255,255,0.10);
+    --series-1:    #3987e5;
+    --series-2:    #d95926;
+    --blind:       rgba(255,255,255,0.05);
+    --accent-soft: #15243a;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 68rem; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+
+  header { border-bottom: 1px solid var(--border); padding-bottom: 1.6rem; margin-bottom: 2.2rem; }
+  .eyebrow { font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 .6rem; }
+  h1 { font-size: clamp(1.7rem, 4.2vw, 2.5rem); line-height: 1.12; margin: 0 0 .5rem; letter-spacing: -.015em; }
+  .lede { font-size: clamp(1rem, 2vw, 1.13rem); color: var(--ink-2); margin: 0 0 1.3rem; max-width: 52rem; }
+  .links { display: flex; flex-wrap: wrap; gap: .55rem; }
+  .links a, .toggle {
+    font: inherit; font-size: .86rem; text-decoration: none; cursor: pointer;
+    color: var(--ink-2); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 7px; padding: .38rem .78rem;
+  }
+  .links a:hover, .toggle:hover { color: var(--ink); border-color: var(--axis); }
+  .toggle { position: fixed; top: 1rem; right: 1rem; z-index: 10; }
+
+  h2 { font-size: 1.22rem; margin: 2.8rem 0 .5rem; letter-spacing: -.01em; }
+  h2:first-of-type { margin-top: 0; }
+  p { margin: 0 0 1rem; max-width: 52rem; color: var(--ink-2); }
+  p strong, li strong { color: var(--ink); font-weight: 600; }
+  .note { font-size: .87rem; color: var(--ink-muted); }
+  a.inline { color: var(--series-1); text-decoration: underline; text-underline-offset: 2px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .8rem; margin: 1.4rem 0 1.8rem; }
+  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .85rem .95rem; }
+  .tile .v { font-size: 1.72rem; line-height: 1.1; font-weight: 600; letter-spacing: -.02em; }
+  .tile .k { font-size: .8rem; color: var(--ink-muted); margin-top: .25rem; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.15rem 1.3rem; margin: 1.2rem 0 1.6rem; }
+
+  .presets { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1rem; }
+  .presets button {
+    font: inherit; font-size: .84rem; cursor: pointer; color: var(--ink-2);
+    background: transparent; border: 1px solid var(--border); border-radius: 999px; padding: .32rem .8rem;
+  }
+  .presets button:hover { color: var(--ink); border-color: var(--axis); }
+  .presets button[aria-pressed="true"] { color: var(--series-1); border-color: var(--series-1); background: var(--accent-soft); }
+
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .55rem 1.6rem; margin-top: 1.1rem; }
+  .ctl label { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; font-size: .85rem; color: var(--ink-2); }
+  .ctl label .val { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] { width: 100%; accent-color: var(--series-1); margin: .15rem 0 .35rem; }
+  /* A parameter with no host endmember present is not identifiable — the retrieval says
+     so in its uncertainty, and the control says so here. */
+  .ctl.inert { opacity: .42; }
+  .ctl.inert label::after { content: "not identifiable"; font-size: .72rem; color: var(--ink-muted); }
+  .group-title { font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); margin: 1.1rem 0 .2rem; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: .1rem 0 .5rem; font-size: .86rem; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: .4rem; }
+  .swatch { width: 15px; height: 3px; border-radius: 2px; display: inline-block; }
+  .swatch.dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  .chart-scroll { overflow-x: auto; }
+  svg { display: block; width: 100%; min-width: 34rem; height: auto; }
+  .tip {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity .1s;
+    background: var(--surface); border: 1px solid var(--axis); border-radius: 8px;
+    padding: .45rem .6rem; font-size: .82rem; color: var(--ink);
+    box-shadow: 0 4px 14px rgba(0,0,0,.13); white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  .chart-host { position: relative; }
+
+  table { border-collapse: collapse; width: 100%; max-width: 46rem; font-size: .92rem; margin: .3rem 0 1.2rem; }
+  th, td { border-bottom: 1px solid var(--border); padding: .42rem .6rem .42rem 0; text-align: left; }
+  th { color: var(--ink-muted); font-weight: 600; font-size: .82rem; letter-spacing: .03em; text-transform: uppercase; }
+  td.num { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); }
+
+  figure { margin: 1.2rem 0 1.6rem; }
+  figure img { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+  figcaption { font-size: .85rem; color: var(--ink-muted); margin-top: .5rem; }
+
+  footer { border-top: 1px solid var(--border); margin-top: 3.2rem; padding-top: 1.2rem; font-size: .85rem; color: var(--ink-muted); }
+  footer a { color: var(--ink-2); }
+  @media (max-width: 34rem) { .toggle { position: static; margin-bottom: 1rem; } }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" aria-label="Switch colour theme">◐ theme</button>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Planet Tanager Open Data Competition 2026</p>
+  <h1>The open hyperspectral archive has no glaciers in it</h1>
+  <p class="lede">
+    A calibrated cryosphere retrieval for Tanager-1 — and the case for pointing it at ice.
+    This page is the interactive companion to the technical memo: the slider below drives the
+    same forward model the retrieval is trained on.
+  </p>
+  <nav class="links">
+    <a href="https://github.com/seantangth/tanager-cryo">Repository</a>
+    <a href="https://github.com/seantangth/tanager-cryo/blob/main/6_papers/submission/technical_memo.pdf">Technical memo (PDF)</a>
+    <a href="https://colab.research.google.com/github/seantangth/tanager-cryo/blob/main/2_notebooks/TANAGER_03_train_exp001_cryo_retrieval_e2e.ipynb">Run it on Colab</a>
+  </nav>
+</header>
+
+<h2>The gap this is built on</h2>
+<p>
+  On 26 August 2026 a combined rock-and-ice slope failure on Langtang Lirung, Nepal, flooded the
+  Bhote Koshi and destroyed the Gyirong border crossing. We asked how often a spaceborne imaging
+  spectrometer had actually looked at the slope that failed.
+</p>
+<div class="tiles">
+  <div class="tile"><div class="v">2</div><div class="k">usable EMIT looks in 3.5 years, of 20 granules</div></div>
+  <div class="tile"><div class="v">28</div><div class="k">months between the last clear look and the failure</div></div>
+  <div class="tile"><div class="v">0</div><div class="k">EMIT observations at 73 °N — the ISS stops at 52°</div></div>
+  <div class="tile"><div class="v">0</div><div class="k">of 153 open Tanager scenes intersect a mapped glacier</div></div>
+</div>
+<p>
+  So the retrieval was built and validated on the cryosphere data that <em>does</em> exist — Arctic
+  sea ice in melt, at Sirmilik National Park, Nunavut. <strong>That absence is the argument, and the
+  prize is what can fix it.</strong>
+</p>
+
+<h2>What 221 bands see that 10 cannot</h2>
+<p>
+  Drag the physical state of the surface. The blue line is what Tanager measures; the orange points
+  are the same spectrum as Sentinel-2 would record it, convolved through ESA's official response
+  functions. Watch the ice absorption features near <strong>1030 and 1240 nm</strong> move as the
+  grains coarsen — and notice that Sentinel-2 has no band anywhere between 865 and 1614 nm.
+</p>
+
+<div class="card">
+  <div class="presets" id="presets"></div>
+
+  <div class="legend">
+    <span><i class="swatch" style="background:var(--series-1)"></i> Tanager — 221 bands</span>
+    <span><i class="swatch dot" style="background:var(--series-2)"></i> Sentinel-2 L2A — 10 bands</span>
+    <span><i class="swatch" style="background:var(--blind);height:11px;border-radius:2px"></i> 865–1614 nm: no Sentinel-2 band</span>
+  </div>
+
+  <div class="chart-host">
+    <div class="chart-scroll">
+      <svg id="chart" viewBox="0 0 900 400" role="img"
+           aria-label="Reflectance against wavelength for the current surface state, with Sentinel-2 band values overlaid"></svg>
+    </div>
+    <div class="tip" id="tip"></div>
+  </div>
+
+  <div class="group-title">Surface composition</div>
+  <div class="controls" id="mixControls"></div>
+  <div class="group-title">Physical state</div>
+  <div class="controls" id="physControls"></div>
+
+  <p class="note" style="margin-top:1rem">
+    Endmembers come from <code>tanager_cryo.forward</code> — Kokhanovsky–Zege asymptotic radiative
+    transfer over Warren &amp; Brandt (2008) ice and Segelstein (1981) water — evaluated on the
+    Sirmilik solar geometry and mixed linearly, exactly as the training set is generated.
+  </p>
+</div>
+
+<h2>The penalty, measured</h2>
+<p>
+  Claims about spectral resolution are cheap, so we ran the experiment: degrade Tanager to another
+  sensor's bands and retrain, holding scenes, forward model, architecture, schedule and seeds fixed.
+  Noise propagation favours the degraded sensor, so every number below is a lower bound.
+</p>
+<table>
+  <thead><tr><th>Retrieved quantity</th><th>Penalty on Sentinel-2's 10 bands</th></tr></thead>
+  <tbody>
+    <tr><td>Grain size (log₁₀ absorption length)</td><td class="num">13.1×</td></tr>
+    <tr><td>Impurity load</td><td class="num">5.5×</td></tr>
+    <tr><td>Melt pond fraction</td><td class="num">5.2×</td></tr>
+    <tr><td>Snow / ice fraction</td><td class="num">4.8×</td></tr>
+    <tr><td>Open water fraction</td><td class="num">4.1×</td></tr>
+    <tr><td>Melt pond depth</td><td class="num">1.8×</td></tr>
+  </tbody>
+</table>
+<p>
+  Against <strong>EMIT and PRISMA</strong> — neither of which can acquire this latitude — the same
+  protocol on their published band sets leaves retrieval skill statistically unchanged: RMSE ratios
+  <strong>0.95–1.03</strong> across all six parameters. The cliff sits between multispectral and
+  imaging spectroscopy, not between 7.4 and 5 nm sampling. <strong>The Arctic gap is orbital, not
+  spectral</strong> — and Tanager is the spectrometer that can reach it.
+</p>
+
+<h2>The check that caught a real error</h2>
+<p>
+  An earlier version of this model scored <em>better</em> on every synthetic test — pond fraction
+  RMSE 0.0030, R² = 1.000 throughout. It was wrong, and no synthetic test could have shown it.
+  Sentinel-2C imaged this scene 29 minutes after Tanager, on the same grid; the first comparison came
+  back <strong>anti-correlated at r = −0.68</strong>. The cause was a domain gap: the forward model
+  reproduces real sea-ice reflectance only to about 0.03, while the network had been trained under
+  noise up to 0.005. Retraining with smooth, physically-shaped perturbations flipped the sign.
+  Synthetic scores got worse, as they should.
+</p>
+<figure>
+  <img src="fig6_s2_validation.png"
+       alt="Tanager and Sentinel-2 dark-surface fraction maps side by side, with a density scatter showing Spearman rho = +0.860">
+  <figcaption>
+    Independent check against same-day Sentinel-2: Spearman ρ = +0.860, monotonic across all ten
+    bins. The residual +0.29 offset is a physical limit — at 30 m, passive optics cannot separate
+    open water from thin dark ice, so the retrieval reports a dark-surface fraction and says so.
+  </figcaption>
+</figure>
+
+<h2>Point it at ice</h2>
+<p>
+  The tool is built, validated and calibrated; the open archive has no glacier to run it on. Ten
+  tasked scenes over glaciated hazard corridors — the Bhote Koshi above Gyirong first, then Cordillera
+  Real, the Karakoram, the Caucasus — would convert a validated Arctic retrieval into a preconditioning
+  baseline for terrain that is actively killing people. No agency can instrument a mountain range, but
+  it can instrument fifty slopes. <strong>The practical use of this retrieval is choosing which
+  fifty.</strong>
+</p>
+
+<footer>
+  <p>
+    Tanager imagery: Tanager STAC Data, <a href="https://www.planet.com/data/stac">planet.com/data/stac</a>,
+    © 2025 Planet Labs PBC, used under CC-BY 4.0. Code Apache-2.0; derived data products CC-BY 4.0.
+    Every number on this page is re-checked from the committed pipeline outputs by
+    <code>python -m tanager_cryo.verify</code>.
+  </p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- theme ---------- */
+  var root = document.documentElement, tgl = document.getElementById("themeToggle");
+  try {
+    var saved = localStorage.getItem("tc-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+  tgl.addEventListener("click", function () {
+    var dark = getComputedStyle(root).getPropertyValue("color-scheme").trim() === "dark";
+    var next = dark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("tc-theme", next); } catch (e) {}
+    draw();
+  });
+
+  /* ---------- state ---------- */
+  var D = null;
+  var st = { iL: 10, iLap: 0, iDepth: 4, fSolid: 60, fPond: 25, fWater: 15 };
+
+  var PRESETS = [
+    { name: "Fine dry snow",   s: { iL: 0,  iLap: 0, iDepth: 4,  fSolid: 100, fPond: 0,  fWater: 0 } },
+    { name: "Melting bare ice",s: { iL: 15, iLap: 1, iDepth: 4,  fSolid: 100, fPond: 0,  fWater: 0 } },
+    { name: "Deep melt pond",  s: { iL: 12, iLap: 0, iDepth: 11, fSolid: 0,   fPond: 100, fWater: 0 } },
+    { name: "Open water",      s: { iL: 10, iLap: 0, iDepth: 4,  fSolid: 0,   fPond: 0,  fWater: 100 } },
+    { name: "Dirty ice",       s: { iL: 15, iLap: 4, iDepth: 4,  fSolid: 100, fPond: 0,  fWater: 0 } },
+    { name: "Sirmilik median pixel", s: { iL: 14, iLap: 1, iDepth: 3, fSolid: 28, fPond: 16, fWater: 56 } }
+  ];
+
+  function fractions() {
+    var t = st.fSolid + st.fPond + st.fWater;
+    if (t <= 0) return [1, 0, 0];
+    return [st.fSolid / t, st.fPond / t, st.fWater / t];
+  }
+
+  function spectrum() {
+    var f = fractions(), n = D.wavelength_nm.length, out = new Float64Array(n);
+    var so = D.solid_per_mil[st.iL][st.iLap],
+        po = D.pond_per_mil[st.iL][st.iDepth],
+        wa = D.water_per_mil;
+    for (var i = 0; i < n; i++) out[i] = (f[0] * so[i] + f[1] * po[i] + f[2] * wa[i]) / 1000;
+    return out;
+  }
+
+  function toS2(sp) {
+    var W = D.sentinel2.weights, nb = D.sentinel2.bands.length, out = new Array(nb).fill(0);
+    for (var i = 0; i < sp.length; i++) {
+      var row = W[i];
+      for (var j = 0; j < nb; j++) out[j] += sp[i] * row[j];
+    }
+    return out;
+  }
+
+  /* ---------- chart ---------- */
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("chart"), tip = document.getElementById("tip");
+  var M = { l: 58, r: 16, t: 14, b: 44 }, W = 900, H = 400;
+  var PW = W - M.l - M.r, PH = H - M.t - M.b;
+  var xMin = 380, xMax = 1790, yMax = 1.0;
+  var cur = { sp: null, s2: null };
+
+  function xOf(nm) { return M.l + (nm - xMin) / (xMax - xMin) * PW; }
+  function yOf(r)  { return M.t + (1 - Math.min(r, yMax) / yMax) * PH; }
+  function el(t, a) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function css(v) { return getComputedStyle(root).getPropertyValue(v).trim(); }
+
+  function draw() {
+    if (!D) return;
+    var ink2 = css("--ink-2"), muted = css("--ink-muted"), grid = css("--grid"),
+        axis = css("--axis"), s1 = css("--series-1"), s2c = css("--series-2"),
+        blind = css("--blind"), surf = css("--surface");
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    // Sentinel-2's blind interval, drawn behind everything as recessive context.
+    svg.appendChild(el("rect", { x: xOf(865), y: M.t, width: xOf(1614) - xOf(865),
+                                 height: PH, fill: blind }));
+    var bl = el("text", { x: (xOf(865) + xOf(1614)) / 2, y: M.t + 15, fill: muted,
+                          "font-size": 11, "text-anchor": "middle" });
+    bl.textContent = "no Sentinel-2 band here";
+    svg.appendChild(bl);
+
+    // y grid + ticks
+    for (var v = 0; v <= 1.0001; v += 0.2) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + PW, y1: yOf(v), y2: yOf(v),
+                                   stroke: grid, "stroke-width": 1 }));
+      var ty = el("text", { x: M.l - 9, y: yOf(v) + 4, fill: muted, "font-size": 11,
+                            "text-anchor": "end" });
+      ty.textContent = v.toFixed(1);
+      svg.appendChild(ty);
+    }
+    // x ticks
+    [400, 600, 800, 1000, 1200, 1400, 1600, 1800].forEach(function (nm) {
+      if (nm > xMax) return;
+      var tx = el("text", { x: xOf(nm), y: M.t + PH + 20, fill: muted, "font-size": 11,
+                            "text-anchor": "middle" });
+      tx.textContent = nm;
+      svg.appendChild(tx);
+    });
+    svg.appendChild(el("line", { x1: M.l, x2: M.l + PW, y1: M.t + PH, y2: M.t + PH,
+                                 stroke: axis, "stroke-width": 1 }));
+
+    var ax = el("text", { x: M.l + PW / 2, y: H - 8, fill: ink2, "font-size": 12,
+                          "text-anchor": "middle" });
+    ax.textContent = "Wavelength (nm)";
+    svg.appendChild(ax);
+    var ay = el("text", { x: 14, y: M.t + PH / 2, fill: ink2, "font-size": 12,
+                          "text-anchor": "middle",
+                          transform: "rotate(-90 14 " + (M.t + PH / 2) + ")" });
+    ay.textContent = "Reflectance";
+    svg.appendChild(ay);
+
+    // Tanager line
+    var sp = cur.sp, wl = D.wavelength_nm, d = "";
+    for (var i = 0; i < wl.length; i++) d += (i ? "L" : "M") + xOf(wl[i]).toFixed(2) + " " + yOf(sp[i]).toFixed(2);
+    svg.appendChild(el("path", { d: d, fill: "none", stroke: s1, "stroke-width": 2,
+                                 "stroke-linejoin": "round" }));
+
+    // Sentinel-2 points, ringed in the surface colour so overlaps stay legible
+    var c = D.sentinel2.centre_nm, s2v = cur.s2;
+    for (var j = 0; j < c.length; j++) {
+      svg.appendChild(el("circle", { cx: xOf(c[j]), cy: yOf(s2v[j]), r: 5.5,
+                                     fill: s2c, stroke: surf, "stroke-width": 2 }));
+    }
+
+    svg.appendChild(el("line", { id: "cx", x1: 0, x2: 0, y1: M.t, y2: M.t + PH,
+                                 stroke: axis, "stroke-width": 1, opacity: 0 }));
+  }
+
+  function recompute() {
+    cur.sp = spectrum();
+    cur.s2 = toS2(cur.sp);
+    // Three of the six retrieved parameters are only conditionally identifiable: pond
+    // depth means nothing where there is no pond, grain size and impurity load mean
+    // nothing where there is no solid surface. Grey the control rather than let a reader
+    // drag it and conclude the page is broken.
+    var f = fractions();
+    ctls.forEach(function (c) {
+      if (!c.wrap) return;
+      var inert = (c.key === "iDepth" && f[1] < 0.02) ||
+                  ((c.key === "iL" || c.key === "iLap") && f[0] < 0.02);
+      c.wrap.classList.toggle("inert", inert);
+    });
+    draw();
+  }
+
+  /* ---------- hover ---------- */
+  function svgX(evt) {
+    var p = svg.createSVGPoint();
+    p.x = evt.clientX; p.y = evt.clientY;
+    var m = svg.getScreenCTM();
+    return m ? p.matrixTransform(m.inverse()).x : null;
+  }
+  svg.addEventListener("mousemove", function (evt) {
+    if (!D) return;
+    var x = svgX(evt);
+    if (x === null || x < M.l || x > M.l + PW) return;
+    var nm = xMin + (x - M.l) / PW * (xMax - xMin);
+    var wl = D.wavelength_nm, best = 0;
+    for (var i = 1; i < wl.length; i++)
+      if (Math.abs(wl[i] - nm) < Math.abs(wl[best] - nm)) best = i;
+    var line = svg.querySelector("#cx");
+    if (line) { line.setAttribute("x1", xOf(wl[best])); line.setAttribute("x2", xOf(wl[best])); line.setAttribute("opacity", 1); }
+    tip.innerHTML = "<strong>" + wl[best].toFixed(0) + " nm</strong> &middot; reflectance " + cur.sp[best].toFixed(3);
+    var host = svg.parentElement.getBoundingClientRect();
+    tip.style.left = Math.min(evt.clientX - host.left + 12, host.width - tip.offsetWidth - 6) + "px";
+    tip.style.top = (evt.clientY - host.top - 38) + "px";
+    tip.style.opacity = 1;
+  });
+  svg.addEventListener("mouseleave", function () {
+    tip.style.opacity = 0;
+    var line = svg.querySelector("#cx");
+    if (line) line.setAttribute("opacity", 0);
+  });
+
+  /* ---------- controls ---------- */
+  function slider(host, key, label, max, fmt) {
+    var wrap = document.createElement("div"); wrap.className = "ctl"; wrap.dataset.key = key;
+    var lab = document.createElement("label");
+    var name = document.createElement("span"); name.textContent = label;
+    var val = document.createElement("span"); val.className = "val";
+    lab.appendChild(name); lab.appendChild(val);
+    var inp = document.createElement("input");
+    inp.type = "range"; inp.min = 0; inp.max = max; inp.step = 1; inp.value = st[key];
+    inp.setAttribute("aria-label", label);
+    inp.addEventListener("input", function () {
+      st[key] = +inp.value; val.textContent = fmt(st[key]);
+      markPreset(null); recompute();
+    });
+    val.textContent = fmt(st[key]);
+    wrap.appendChild(lab); wrap.appendChild(inp);
+    host.appendChild(wrap);
+    return { input: inp, val: val, fmt: fmt, key: key, wrap: wrap };
+  }
+
+  var ctls = [];
+  function buildControls() {
+    var mix = document.getElementById("mixControls"), phy = document.getElementById("physControls");
+    ctls.push(slider(mix, "fSolid", "Solid ice / snow", 100, function (v) { return v + "%"; }));
+    ctls.push(slider(mix, "fPond", "Melt pond", 100, function (v) { return v + "%"; }));
+    ctls.push(slider(mix, "fWater", "Open water", 100, function (v) { return v + "%"; }));
+
+    var L = D.axes.log10_absorption_length_m, LAP = D.axes.lap_load, DP = D.axes.pond_depth_m;
+    ctls.push(slider(phy, "iL", "Grain size (absorption length)", L.length - 1, function (i) {
+      var m = Math.pow(10, L[i]);
+      return m < 1e-3 ? (m * 1e6).toFixed(0) + " µm" : (m * 1000).toFixed(1) + " mm";
+    }));
+    ctls.push(slider(phy, "iDepth", "Melt pond depth", DP.length - 1, function (i) {
+      return (DP[i] * 100).toFixed(0) + " cm";
+    }));
+    ctls.push(slider(phy, "iLap", "Impurity load", LAP.length - 1, function (i) {
+      return LAP[i].toFixed(0) + " m⁻¹";
+    }));
+  }
+
+  function syncControls() {
+    ctls.forEach(function (c) { c.input.value = st[c.key]; c.val.textContent = c.fmt(st[c.key]); });
+  }
+
+  function markPreset(idx) {
+    var bs = document.getElementById("presets").children;
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute("aria-pressed", String(i === idx));
+  }
+
+  function buildPresets() {
+    var host = document.getElementById("presets");
+    PRESETS.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = p.name; b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function () {
+        for (var k in p.s) st[k] = p.s[k];
+        syncControls(); markPreset(i); recompute();
+      });
+      host.appendChild(b);
+    });
+  }
+
+  /* ---------- boot ---------- */
+  fetch("spectra.json").then(function (r) { return r.json(); }).then(function (j) {
+    D = j;
+    buildPresets(); buildControls();
+    markPreset(1);
+    for (var k in PRESETS[1].s) st[k] = PRESETS[1].s[k];
+    syncControls(); recompute();
+    window.addEventListener("resize", draw);
+  }).catch(function (e) {
+    document.getElementById("chart").outerHTML =
+      '<p class="note">Could not load <code>spectra.json</code> — regenerate it with ' +
+      '<code>python -m tanager_cryo.export_explorer</code>. (' + e + ')</p>';
+  });
+})();
+</script>
+</body>
+</html>
