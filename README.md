@@ -166,6 +166,8 @@ workflows read past. It is used three times here:
 
 ## Run it in one notebook
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/seantangth/tanager-cryo/blob/main/2_notebooks/TANAGER_03_train_exp001_cryo_retrieval_e2e.ipynb)
+
 [`2_notebooks/TANAGER_03_train_exp001_cryo_retrieval_e2e.ipynb`](2_notebooks/TANAGER_03_train_exp001_cryo_retrieval_e2e.ipynb)
 walks the whole submission end to end: the observation gap, the glacier audit, band
 selection, forward-model sanity checks, training, calibration, the retrieval, the

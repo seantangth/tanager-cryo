@@ -15,7 +15,7 @@ re-check the memo's headline numbers.
   ~20 s. The bottleneck is entirely network I/O (the 883 MB Tanager scene and the
   CMR/STAC queries), not compute. Uploading data to a rented GPU would take longer than
   the training itself.
-- Estimated time: ~3 min with `DRY_RUN = True`; ~25 min full (of which ~15 min is
+- Estimated time: ~3 min with `DRY_RUN = True`; ~35 min full (of which ~15 min is
   downloading)
 
 ## Cell outline
@@ -25,7 +25,7 @@ re-check the memo's headline numbers.
 | 2 | Config | `DRY_RUN`, repo acquisition (clone or local detection), path constants, seed, runtime detection |
 | 3 | Install & Smoke Test | pip install pinned deps, import checks (incl. `xarray-hyperspectral` engine registration) |
 | 4 | The observation gap | CMR query for EMIT coverage of the Langtang source zone; print usable observations and gap in months |
-| 5 | Glacier audit | Overpass spot check (DRY_RUN checks the 7 Snow/Ice scenes), confirming the open catalogue holds no glacier |
+| 5 | Glacier audit | Overpass spot check via `glacier_check.glacier_count` (DRY_RUN checks the 7 Snow/Ice scenes), plus the committed full-catalogue result |
 | 6 | Fetch Tanager scene | `tanager_cryo.fetch` downloads the Sirmilik ortho SR (DRY_RUN fetches the thumbnail only) |
 | 7 | Band selection from uncertainty | derive the 221 bands from the scene's own SNR spectrum; plot SNR curve and threshold |
 | 8 | Forward model sanity | five physical checks (grain size ↑ → NIR ↓, pond depth ↑ → red ↓, impurities darken the visible only, …) |
@@ -34,7 +34,7 @@ re-check the memo's headline numbers.
 | 11 | Evaluate | accuracy (incl. conditional) + calibration (var(z), 68/95% coverage) |
 | 12 | Retrieve on the real scene | apply to Sirmilik; print forward-model error vs instrument σ and explained fraction |
 | 13 | Independent validation | same-day Sentinel-2 10 m classification / linear dark fraction, aggregated 3×3 |
-| 14 | Sensor comparison | degradation experiment, Tanager 221 bands vs Sentinel-2's 10 (reduced size in DRY_RUN) |
+| 14 | Sensor comparison | degradation experiments: Tanager 221 bands vs Sentinel-2's 10, then vs the EMIT and PRISMA band sets (reduced size in DRY_RUN) |
 | 15 | Figures | write all figures to `5_outputs/figures/` |
 | 16 | Verify | run `tanager_cryo.verify` against the memo's headline numbers |
 | 17 | Summary | very short handover |
@@ -57,7 +57,8 @@ re-check the memo's headline numbers.
 - Outputs:
   - `4_models/cryo_retrieval.pt`, `cryo_retrieval_meta.json`
   - `5_outputs/sirmilik_retrieval.nc`, `s2_validation.nc`, `s2_validation.json`
-  - `5_outputs/sensor_comparison.json`, `observation_gap.json`, `evaluation.json`
+  - `5_outputs/sensor_comparison.json`, `sensor_comparison_hsi.json`,
+    `observation_gap.json`, `evaluation.json`, `glacier_audit.json`
   - `5_outputs/figures/fig1..fig6*.png`
 
 ## Data specification
@@ -103,8 +104,12 @@ re-check the memo's headline numbers.
 - Sentinel-2 validation must produce **both the hard classification and the
   threshold-free linear** reference, and state the hard classifier's low bias on water
 - The cross-sensor comparison must hold scene / forward model / architecture / schedule /
-  seed fixed, varying only the band set
-- `5_outputs/s2_validation.json` and `sensor_comparison.json` must be produced
+  seed fixed, varying only the band set — this applies to the EMIT/PRISMA comparison too,
+  which must retrain its own Tanager baseline arm rather than borrow one across runs
+- Every output a dry run writes must carry the `_dryrun` suffix; a reduced run must never
+  overwrite an artefact committed to the repository
+- `5_outputs/s2_validation.json`, `sensor_comparison.json` and
+  `sensor_comparison_hsi.json` must be produced
 - `tanager_cryo.verify` must run at the end and display its result; it may not be skipped
 - The model-error perturbation must never be removed to make the numbers look better
 

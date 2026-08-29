@@ -8,6 +8,10 @@
 # Private working notes — not part of the submission
 notes/
 
+# Dry-run artefacts: reduced-scale copies the notebook writes so it can exercise every
+# code path without touching the verified outputs committed here.
+*_dryrun.*
+
 # Environment
 .venv/
 __pycache__/
