@@ -1,7 +1,7 @@
 # Data Availability
 
 Everything this submission uses is public and requires no credentials. Catalogue
-counts are stated as of **2026-08-28**; live catalogues grow.
+counts are stated as of **2026-08-29**; live catalogues grow.
 
 ## Tanager (primary data)
 
@@ -13,7 +13,7 @@ counts are stated as of **2026-08-28**; live catalogues grow.
 | Access | public Google Cloud Storage, no authentication — `python -m tanager_cryo.fetch --scene 20250606_181248_58_4001` |
 | Licence | © 2025 Planet Labs PBC, CC-BY 4.0 |
 
-The catalogue held 153 unique scenes across 9 collections as of 2026-08-28.
+The catalogue held 153 unique scenes across 9 collections as of 2026-08-29.
 `python -m tanager_cryo.glacier_check` audits every scene footprint against the
 OpenStreetMap `natural=glacier` layer (result: zero intersections; output in
 `5_outputs/glacier_audit.json`).

@@ -11,7 +11,7 @@ Submission to the Planet Tanager Open Data Competition 2026.
 On **26 August 2026** a combined **rock and ice** slope failure on Langtang Lirung, Nepal,
 sent bedrock and glacier ice into the Lhende Khola. The debris dammed the river; the
 impoundment breached and the flood ran ~100 km, destroying the Gyirong border crossing.
-As of 28 August more than 600 people were confirmed dead and more than 1,900 were missing
+As of 29 August more than 600 people were confirmed dead and more than 1,900 were missing
 in Nepal, with further deaths in Gyirong County, Tibet; the toll is still rising.
 
 It was neither a glacial lake outburst flood nor a clean glacier detachment — the scar
@@ -26,7 +26,7 @@ We asked how often a spaceborne imaging spectrometer had actually looked at that
 | Of those, usable at < 55% cloud | **2** |
 | Last usable observation before the failure | **2024-04-06 — 28 months** |
 | EMIT observations of Sirmilik, 73.7 N | **0, structurally** — the ISS reaches only ±52° |
-| Tanager Open STAC scenes intersecting a mapped glacier (all 153 as of 2026-08-28, via OSM/Overpass) | **0** |
+| Tanager Open STAC scenes intersecting a mapped glacier (all 153 as of 2026-08-29, via OSM/Overpass) | **0** |
 
 **The open hyperspectral archive contains no glacier.** That absence is the argument, and
 the prize — winners select which Tanager images enter the open catalogue — is what can fix it.

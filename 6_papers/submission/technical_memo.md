@@ -13,7 +13,7 @@ below: see Project Materials.
 On **26 August 2026** a combined rock and ice slope failure on the north side of Langtang
 Lirung, Nepal, sent bedrock and glacier ice into the Lhende Khola. The debris temporarily
 dammed the river; the impoundment breached, and the flood ran nearly 100 km down the Bhote
-Koshi and Trishuli, destroying the Gyirong border crossing. As of 28 August more than 600
+Koshi and Trishuli, destroying the Gyirong border crossing. As of 29 August more than 600
 people were confirmed dead and more than 1,900 were missing in Nepal, with further deaths
 in Gyirong County, Tibet; the toll is still rising.
 
@@ -38,7 +38,7 @@ At 73 N the number is not small but structural: **zero**. EMIT flies on the ISS,
 reaches only ±52°; PRISMA acquires only within ±70°; EnMAP's proposal-driven archive holds
 no systematic sea-ice coverage. No spaceborne imaging spectrometer systematically observes
 the Arctic sea-ice zone. And querying all **153 scenes** of the Tanager Open STAC catalogue
-(as of 28 August 2026) against the OpenStreetMap glacier layer returns **zero
+(as of 29 August 2026) against the OpenStreetMap glacier layer returns **zero
 intersections**. The open archive contains no glacier.
 
 That absence is the argument, and the prize is what can fix it.
