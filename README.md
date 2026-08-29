@@ -4,6 +4,10 @@
 
 Submission to the Planet Tanager Open Data Competition 2026.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22163614.svg)](https://doi.org/10.5281/zenodo.22163614)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/seantangth/tanager-cryo/blob/main/2_notebooks/TANAGER_03_train_exp001_cryo_retrieval_e2e.ipynb)
+
 **▶ [Interactive companion: what 221 bands see that 10 cannot](https://seantangth.github.io/tanager-cryo/)** —
 drag the physical state of the ice and watch the spectrum move, with Sentinel-2's ten bands
 drawn on top. It runs the same forward model the retrieval is trained on.

@@ -7,6 +7,9 @@ authors:
     given-names: Sean
 repository-code: "https://github.com/seantangth/tanager-cryo"
 url: "https://seantangth.github.io/tanager-cryo/"
+doi: 10.5281/zenodo.22163614
+version: 1.0.0
+date-released: 2026-08-30
 abstract: >-
   A physics-based retrieval that inverts Planet Tanager-1 surface reflectance into
   sub-pixel fractions of solid ice/snow, melt pond and dark surface, together with
